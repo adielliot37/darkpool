@@ -1,0 +1,43 @@
+{
+  "agent": "darkpool-relay",
+  "version": "1.0.0",
+  "chain": "Base (chainId: 8453)",
+  "standards": ["ERC-8004"],
+  "contracts": {
+    "DarkpoolRegistry": "0xCa46735BF5c66575C8ac1E6302b539C4eBEa28F7",
+    "AgentIdentity8004": "0x91786D8747434cAF52631c272Ecb5E1C9803A82c",
+    "ERC8004_IdentityRegistry": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+    "ERC8004_ReputationRegistry": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63"
+  },
+  "agentId": 37507,
+  "transactions": [
+    {
+      "type": "erc8004-register",
+      "txHash": "0x15d7788138ed7af24fc1df86e9b9db2f905612f8463115937ee761e77998af01",
+      "agentId": 37507,
+      "registry": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+      "timestamp": "2026-03-28T01:10:00Z"
+    },
+    {
+      "type": "darkpool-registry-register",
+      "txHash": "0x1c5235d59975b3dd2d7400ca0071aec27f51a0f47b0b1abf30a431f58ad9fb7e",
+      "registry": "0xCa46735BF5c66575C8ac1E6302b539C4eBEa28F7",
+      "timestamp": "2026-03-28T01:08:00Z"
+    },
+    {
+      "type": "erc8004-custom-register",
+      "txHash": "0xe0efda9209b2703340550555c5a8c02d1c9df3dead6ebda189e5a8999dfd9be6",
+      "registry": "0x91786D8747434cAF52631c272Ecb5E1C9803A82c",
+      "timestamp": "2026-03-28T01:08:30Z"
+    }
+  ],
+  "relayLog": [],
+  "hackathon": "PL_Genesis 2026",
+  "tracks": [
+    "Agents With Receipts — ERC-8004",
+    "Infrastructure & Digital Rights — Protocol Labs",
+    "NextGen AI Apps — Lit Protocol",
+    "Starknet",
+    "Storacha"
+  ]
+}

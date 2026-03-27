@@ -1,4 +1,4 @@
-import * as Client from "@web3-storage/w3up-client";
+import * as Client from "@storacha/client";
 import readline from "readline";
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -10,34 +10,60 @@ async function main() {
   console.log("=".repeat(50));
   console.log("");
 
+  console.log("Creating Storacha client...");
   const client = await Client.create();
 
   const email = await ask("Enter your email for Storacha verification: ");
-  console.log(`\nSending verification email to ${email}...`);
 
+  console.log(`\nCheck your email (${email}) and click the verification link...`);
   const account = await client.login(email as `${string}@${string}`);
-  console.log("\nCheck your email and click the verification link.");
-  console.log("Waiting for verification...");
+  console.log("Verified!\n");
 
-  await account.plan.wait();
-  console.log("Email verified!");
+  console.log("Creating space...");
+  try {
+    const space = await client.createSpace("darkpool-receipts", {
+      account,
+      skipGatewayAuthorization: true,
+    });
+    await space.save();
+    await client.setCurrentSpace(space.did());
 
-  const space = await client.createSpace("darkpool-receipts", { account });
-  await space.save();
-  console.log(`\nSpace created: ${space.did()}`);
+    console.log(`Space created: ${space.did()}`);
+    console.log("\n" + "=".repeat(50));
+    console.log("  Add this to your .env file:");
+    console.log("=".repeat(50));
+    console.log(`\nSTORACHA_SPACE_DID=${space.did()}`);
+  } catch (err: any) {
+    console.error("\nSpace creation error details:");
+    console.error("  Name:", err.name);
+    console.error("  Message:", err.message);
+    if (err.cause) console.error("  Cause:", err.cause);
 
-  console.log("\n" + "=".repeat(50));
-  console.log("  Add this to your .env file:");
-  console.log("=".repeat(50));
-  console.log(`\nSTORACHA_SPACE_DID=${space.did()}`);
+    console.log("\nTrying with account provisioning first...");
+    const spaces = client.spaces();
+    if (spaces.length > 0) {
+      const existing = spaces[0];
+      await client.setCurrentSpace(existing.did());
+      console.log(`\nUsing existing space: ${existing.did()}`);
+      console.log("\n" + "=".repeat(50));
+      console.log("  Add this to your .env file:");
+      console.log("=".repeat(50));
+      console.log(`\nSTORACHA_SPACE_DID=${existing.did()}`);
+    } else {
+      throw err;
+    }
+  }
+
   console.log("");
-  console.log("The agent credentials are saved locally.");
-  console.log("Run this script once — you won't need to verify again.");
+  console.log("Agent credentials saved locally by Storacha.");
+  console.log("You won't need to verify again on this machine.");
 
   rl.close();
 }
 
 main().catch((err) => {
-  console.error("Setup failed:", err.message);
+  console.error("\nSetup failed:", err.message);
+  if (err.cause) console.error("Cause:", err.cause);
+  rl.close();
   process.exit(1);
 });

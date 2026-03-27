@@ -28,7 +28,7 @@ async function initStoracha(): Promise<boolean> {
   if (storachaReady) return true;
   if (!config.storachaSpaceDid) return false;
   try {
-    const Client = await import("@web3-storage/w3up-client");
+    const Client = await import("@storacha/client");
     storachaClient = await Client.create();
     await storachaClient.setCurrentSpace(config.storachaSpaceDid as `did:${string}:${string}`);
     storachaReady = true;

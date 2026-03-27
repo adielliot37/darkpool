@@ -8,3 +8,4 @@ artifacts/
 typechain-types/
 coverage/
 .DS_Store
+storacha-credentials.json

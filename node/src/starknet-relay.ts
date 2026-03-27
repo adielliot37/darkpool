@@ -18,7 +18,7 @@ export interface StarknetRelayResult {
   chain: "starknet";
 }
 
-const STARKNET_RPC = process.env.STARKNET_RPC_URL || "https://free-rpc.nethermind.io/mainnet-juno/";
+const STARKNET_RPC = process.env.STARKNET_RPC_URL || "https://rpc.starknet.lava.build";
 
 export async function relayStarknetTx(tx: StarknetTx): Promise<StarknetRelayResult> {
   const response = await fetch(STARKNET_RPC, {
