@@ -1,14 +1,27 @@
 import { ethers } from "ethers";
 import crypto from "crypto";
+import fs from "fs";
+import path from "path";
+
+const KEY_FILE = path.join(process.cwd(), ".node-key");
 
 class KeyManager {
   private wallet: ethers.Wallet | null = null;
 
   async initialize(provider?: ethers.Provider): Promise<ethers.Wallet> {
-    const randomBytes = crypto.randomBytes(32);
-    this.wallet = new ethers.Wallet(ethers.hexlify(randomBytes), provider);
+    let privateKey: string;
+
+    if (fs.existsSync(KEY_FILE)) {
+      privateKey = fs.readFileSync(KEY_FILE, "utf-8").trim();
+      console.log("[KeyManager] Loaded persistent node key");
+    } else {
+      privateKey = ethers.hexlify(crypto.randomBytes(32));
+      fs.writeFileSync(KEY_FILE, privateKey, { mode: 0o600 });
+      console.log("[KeyManager] Generated new node key (saved to disk)");
+    }
+
+    this.wallet = new ethers.Wallet(privateKey, provider);
     console.log(`[KeyManager] Node wallet: ${this.wallet.address}`);
-    console.log(`[KeyManager] Key exists in RAM only. Restart = new key.`);
     return this.wallet;
   }
 
