@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { config } from "./config.js";
+import { getLitClient, encryptWithLit } from "./lit-actions.js";
 
 interface EncryptedTx {
   ciphertext: string;
@@ -12,27 +12,6 @@ interface EncryptedTx {
 }
 
 const LOCAL_KEY = crypto.randomBytes(32);
-let litClient: any = null;
-let litReady = false;
-
-async function initLit(): Promise<boolean> {
-  if (litReady) return true;
-  try {
-    const { LitNodeClient } = await import("@lit-protocol/lit-node-client");
-    const { LIT_NETWORK } = await import("@lit-protocol/constants");
-    litClient = new LitNodeClient({
-      litNetwork: (config.litNetwork as any) || LIT_NETWORK.DatilDev,
-      debug: false,
-    });
-    await litClient.connect();
-    litReady = true;
-    console.log("[Encryptor] Lit Protocol connected");
-    return true;
-  } catch (err: any) {
-    console.warn("[Encryptor] Lit Protocol unavailable, using local encryption:", err.message);
-    return false;
-  }
-}
 
 function localEncrypt(rawTx: string): EncryptedTx {
   const iv = crypto.randomBytes(16);
@@ -63,40 +42,20 @@ function localDecrypt(encrypted: EncryptedTx): string {
 }
 
 export async function encryptTransaction(rawTx: string): Promise<EncryptedTx> {
-  const useLit = await initLit();
+  const client = await getLitClient();
 
-  if (useLit && litClient) {
-    try {
-      const accessControlConditions = [
-        {
-          contractAddress: "",
-          standardContractType: "",
-          chain: config.network === "base" ? "base" : "ethereum",
-          method: "",
-          parameters: [":currentActionIpfsId"],
-          returnValueTest: {
-            comparator: "contains",
-            value: "darkpool-relay",
-          },
-        },
-      ];
-
-      const { ciphertext, dataToEncryptHash } = await litClient.encrypt({
-        dataToEncrypt: new TextEncoder().encode(rawTx),
-        accessControlConditions,
-      });
-
+  if (client) {
+    const result = await encryptWithLit(client, rawTx);
+    if (result) {
       return {
-        ciphertext: Buffer.from(await ciphertext.arrayBuffer?.() || ciphertext).toString("hex"),
+        ciphertext: result.ciphertext,
         iv: "",
         tag: "",
         timestamp: Date.now(),
         originalHash: crypto.createHash("sha256").update(rawTx).digest("hex"),
         litEncrypted: true,
-        dataToEncryptHash,
+        dataToEncryptHash: result.dataToEncryptHash,
       };
-    } catch (err: any) {
-      console.warn("[Encryptor] Lit encrypt failed, falling back to local:", err.message);
     }
   }
 
@@ -104,29 +63,32 @@ export async function encryptTransaction(rawTx: string): Promise<EncryptedTx> {
 }
 
 export async function decryptTransaction(encrypted: EncryptedTx): Promise<string> {
-  if (encrypted.litEncrypted && litClient && litReady) {
+  if (!encrypted.litEncrypted) return localDecrypt(encrypted);
+
+  const client = await getLitClient();
+  if (client && encrypted.dataToEncryptHash) {
     try {
-      const decrypted = await litClient.decrypt({
-        ciphertext: Buffer.from(encrypted.ciphertext, "hex"),
-        dataToEncryptHash: encrypted.dataToEncryptHash,
+      const decrypted = await client.decrypt({
+        chain: "base",
+        ciphertext: encrypted.ciphertext as any,
+        dataToEncryptHash: encrypted.dataToEncryptHash!,
         accessControlConditions: [
           {
             contractAddress: "",
             standardContractType: "",
-            chain: config.network === "base" ? "base" : "ethereum",
+            chain: "base" as const,
             method: "",
             parameters: [":currentActionIpfsId"],
             returnValueTest: {
-              comparator: "contains",
+              comparator: "contains" as const,
               value: "darkpool-relay",
             },
           },
         ],
       });
-      return new TextDecoder().decode(decrypted);
+      return new TextDecoder().decode(decrypted as any);
     } catch (err: any) {
       console.warn("[Encryptor] Lit decrypt failed:", err.message);
-      throw err;
     }
   }
   return localDecrypt(encrypted);

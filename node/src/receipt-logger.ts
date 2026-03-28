@@ -2,6 +2,7 @@ import { keyManager } from "./key-manager.js";
 import { config } from "./config.js";
 import { RelayResult } from "./private-relay.js";
 import { MevEstimate } from "./mev-estimator.js";
+import { getLitClient, verifyRelayWithLitAction } from "./lit-actions.js";
 import { ethers } from "ethers";
 import fs from "fs/promises";
 import path from "path";
@@ -14,6 +15,8 @@ export interface RelayReceipt {
   estimatedMevSaved: string;
   nodeSignature: string;
   storachaCid?: string;
+  litVerified?: boolean;
+  litSignature?: string;
 }
 
 const RECEIPTS_DIR = path.join(process.cwd(), "receipts");
@@ -69,6 +72,18 @@ export async function logRelay(
 
   const signature = await keyManager.sign(JSON.stringify(receiptData));
   const receipt: RelayReceipt = { ...receiptData, nodeSignature: signature };
+
+  const litClient = await getLitClient();
+  if (litClient) {
+    try {
+      const verification = await verifyRelayWithLitAction(litClient, receiptData, null, "");
+      receipt.litVerified = verification.verified;
+      if (verification.signature) receipt.litSignature = verification.signature;
+      console.log(`[Receipt] Lit verification: ${verification.verified ? "PASSED" : "SKIPPED"}`);
+    } catch {
+      receipt.litVerified = false;
+    }
+  }
 
   const receiptJson = JSON.stringify(receipt, null, 2);
 
