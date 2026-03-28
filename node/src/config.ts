@@ -29,7 +29,7 @@ export const config = {
   wsUrl: getWsUrl(),
   registryAddress: process.env.REGISTRY_CONTRACT_ADDRESS || "",
   identityAddress: process.env.AGENT_IDENTITY_CONTRACT_ADDRESS || "",
-  litNetwork: process.env.LIT_NETWORK || "datil-dev",
+  litNetwork: process.env.LIT_NETWORK || "datil",
   storachaSpaceDid: process.env.STORACHA_SPACE_DID || "",
   batchSize: 5,
   batchTimeoutMs: 10_000,
