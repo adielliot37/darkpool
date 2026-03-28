@@ -25,7 +25,10 @@ const REGISTRY_ABI = [
 ];
 
 export function getAgentState() {
-  return { ...state };
+  return {
+    ...state,
+    totalMevSaved: state.totalMevSaved.toString(),
+  };
 }
 
 export function recordRelay(mevSaved: bigint) {
