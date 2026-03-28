@@ -7,7 +7,7 @@ import SideBySideDemo from "./components/SideBySideDemo.js";
 import { useNetworkStats } from "./hooks/useContract.js";
 import { useNodeStatus, useRelayEvents, useAttackerStatus } from "./hooks/useNodeStats.js";
 
-const NODE_URL = "http://localhost:8545";
+const NODE_URL = "https://mev.elliot37.com";
 const ATTACKER_URL = "http://localhost:9000";
 
 const sectionStyle: React.CSSProperties = {

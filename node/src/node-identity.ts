@@ -95,7 +95,7 @@ export class NodeIdentity {
         2,
         "mev-protection",
         "relay",
-        `http://192.168.1.17:${config.port}`,
+        process.env.PUBLIC_URL || `https://mev.elliot37.com`,
         receiptCid || "",
         feedbackHash
       );

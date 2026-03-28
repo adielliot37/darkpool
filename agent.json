@@ -6,12 +6,12 @@
   "services": [
     {
       "name": "JSON-RPC",
-      "endpoint": "http://192.168.1.17:8545",
+      "endpoint": "https://mev.elliot37.com",
       "version": "1.0.0"
     },
     {
       "name": "SSE",
-      "endpoint": "http://192.168.1.17:8545/events/stream",
+      "endpoint": "https://mev.elliot37.com/events/stream",
       "version": "1.0.0"
     }
   ],
@@ -27,7 +27,7 @@
   "capabilities": {
     "chains": ["ethereum", "base", "starknet"],
     "mevProtection": true,
-    "encryption": "lit-protocol-v1-naga",
+    "encryption": "lit-protocol-v3-chipotle",
     "storage": "storacha-filecoin",
     "hardware": "raspberry-pi-4"
   }
