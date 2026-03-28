@@ -9,6 +9,7 @@ import { estimateMevSavings, MevEstimate } from "./mev-estimator.js";
 import { logRelay, RelayReceipt } from "./receipt-logger.js";
 import { EventEmitter } from "events";
 import { isStarknetMethod, relayStarknetTx, proxyStarknetRpc } from "./starknet-relay.js";
+import { recordRelay, getAgentState } from "./agent-loop.js";
 
 export interface RelayEvent {
   type: "received" | "encrypted" | "batched" | "relayed" | "confirmed";
@@ -72,6 +73,7 @@ export function createRpcServer() {
         };
 
         const receipt = await logRelay(relayResult, mevEstimate);
+        recordRelay(mevEstimate.estimatedSavings);
         pushEvent({ type: "confirmed", txHash: hash, timestamp: Date.now(), mevEstimate, receipt, relayResult });
 
         return res.json({ jsonrpc: "2.0", id, result: hash });
@@ -127,6 +129,7 @@ export function createRpcServer() {
       totalMevSaved: totalMevSaved.toString(),
       pendingBatch: batcher.getPendingCount(),
       uptime: process.uptime(),
+      agent: getAgentState(),
     });
   });
 

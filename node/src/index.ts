@@ -2,6 +2,7 @@ import { config } from "./config.js";
 import { keyManager } from "./key-manager.js";
 import { nodeIdentity } from "./node-identity.js";
 import { createRpcServer } from "./rpc-server.js";
+import { runAgentLoop } from "./agent-loop.js";
 import { ethers } from "ethers";
 
 async function main() {
@@ -24,6 +25,7 @@ async function main() {
     console.log(`[Node] Point your wallet RPC to: http://localhost:${config.port}`);
     console.log(`[Node] Status: http://localhost:${config.port}/status`);
     console.log(`[Node] Events: http://localhost:${config.port}/events/stream`);
+    runAgentLoop();
   });
 
   process.on("SIGINT", () => {

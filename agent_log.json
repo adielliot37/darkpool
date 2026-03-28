@@ -29,9 +29,45 @@
       "txHash": "0xe0efda9209b2703340550555c5a8c02d1c9df3dead6ebda189e5a8999dfd9be6",
       "registry": "0x91786D8747434cAF52631c272Ecb5E1C9803A82c",
       "timestamp": "2026-03-28T01:08:30Z"
+    },
+    {
+      "type": "erc8004-reputation-feedback",
+      "txHash": "0xd364814042022807baf838467398250c4ed2f838f707ad09831c5b9b8d841c7a",
+      "registry": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+      "agentId": 37507,
+      "tag": "mev-protection",
+      "value": 100,
+      "timestamp": "2026-03-28T12:30:00Z"
+    },
+    {
+      "type": "erc8004-reputation-feedback",
+      "txHash": "0x9c0f4e7c64209e6cf9649bfbea9247ddb7a8d442d089bf32b2fdedb2e68f22c6",
+      "registry": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+      "agentId": 37507,
+      "tag": "mev-protection",
+      "value": 50,
+      "timestamp": "2026-03-28T12:31:00Z"
+    },
+    {
+      "type": "erc8004-reputation-feedback",
+      "txHash": "0xed3fafee586145c170445edf70d605c90939861a5ea254127b3a88877b181242",
+      "registry": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+      "agentId": 37507,
+      "tag": "relay-performance",
+      "value": 80,
+      "timestamp": "2026-03-28T12:31:30Z"
     }
   ],
-  "relayLog": [],
+  "relayLog": [
+    {
+      "txHash": "0x251196b749efb1f5502ed52f2e739d631991b4c506c87d49c86702508d5adbf9",
+      "storachaCid": "bafkreiefl6jie42ulmoq4xva3smcsi7ibiym6j37m35gvidwpaguiqkhzu",
+      "mevSaved": "0.0000012 ETH",
+      "litEncrypted": true,
+      "block": 43945905,
+      "timestamp": "2026-03-28T12:29:00Z"
+    }
+  ],
   "hackathon": "PL_Genesis 2026",
   "tracks": [
     "Agents With Receipts — ERC-8004",
