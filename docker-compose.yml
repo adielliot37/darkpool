@@ -1,0 +1,74 @@
+version: "3.8"
+
+services:
+  node1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8545:8545"
+    environment:
+      - NODE_PORT=8545
+      - NODE_ID=darkpool-pi-node
+      - NETWORK=sepolia
+      - SEPOLIA_RPC_URL=${SEPOLIA_RPC_URL}
+      - SEPOLIA_WS_URL=${SEPOLIA_WS_URL}
+      - REGISTRY_CONTRACT_ADDRESS=${REGISTRY_CONTRACT_ADDRESS}
+      - AGENT_IDENTITY_CONTRACT_ADDRESS=${AGENT_IDENTITY_CONTRACT_ADDRESS}
+      - LIT_NETWORK=datil-dev
+    restart: unless-stopped
+
+  node2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8546:8545"
+    environment:
+      - NODE_PORT=8545
+      - NODE_ID=darkpool-node-02
+      - NETWORK=sepolia
+      - SEPOLIA_RPC_URL=${SEPOLIA_RPC_URL}
+      - SEPOLIA_WS_URL=${SEPOLIA_WS_URL}
+      - REGISTRY_CONTRACT_ADDRESS=${REGISTRY_CONTRACT_ADDRESS}
+      - AGENT_IDENTITY_CONTRACT_ADDRESS=${AGENT_IDENTITY_CONTRACT_ADDRESS}
+    restart: unless-stopped
+
+  node3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8547:8545"
+    environment:
+      - NODE_PORT=8545
+      - NODE_ID=darkpool-node-03
+      - NETWORK=sepolia
+      - SEPOLIA_RPC_URL=${SEPOLIA_RPC_URL}
+      - SEPOLIA_WS_URL=${SEPOLIA_WS_URL}
+      - REGISTRY_CONTRACT_ADDRESS=${REGISTRY_CONTRACT_ADDRESS}
+      - AGENT_IDENTITY_CONTRACT_ADDRESS=${AGENT_IDENTITY_CONTRACT_ADDRESS}
+    restart: unless-stopped
+
+  attacker-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.attacker
+    ports:
+      - "9000:9000"
+    environment:
+      - SEPOLIA_RPC_URL=${SEPOLIA_RPC_URL}
+      - SEPOLIA_WS_URL=${SEPOLIA_WS_URL}
+      - ATTACKER_PORT=9000
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_REGISTRY_ADDRESS=${REGISTRY_CONTRACT_ADDRESS}
+      - VITE_SEPOLIA_RPC=${SEPOLIA_RPC_URL}
+    restart: unless-stopped
