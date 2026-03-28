@@ -17,12 +17,19 @@ async function execAction(code: string, jsParams: Record<string, any>): Promise<
     headers: { "X-Api-Key": key, "Content-Type": "application/json" },
     body: JSON.stringify({ code, js_params: jsParams }),
   });
-  const data = await res.json();
+  const text = await res.text();
+  let data: any;
+  try {
+    data = typeof text === "string" && text.startsWith('"') ? JSON.parse(JSON.parse(text)) : JSON.parse(text);
+  } catch {
+    data = JSON.parse(text);
+  }
   if (data.has_error) {
     console.warn("[Lit-Chipotle] Action error:", data.logs);
     return null;
   }
-  return typeof data.response === "string" ? JSON.parse(data.response) : data.response;
+  const response = data.response;
+  return typeof response === "string" ? JSON.parse(response) : response;
 }
 
 export async function litEncrypt(message: string): Promise<string | null> {
