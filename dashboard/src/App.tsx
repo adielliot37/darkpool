@@ -31,10 +31,10 @@ export default function App() {
   const attackerStatus = useAttackerStatus(ATTACKER_URL);
 
   const displayNodes = nodes.length > 0 ? nodes : nodeStatus ? [{
-    address: "0x" + "0".repeat(40),
-    endpoint: `http://localhost:${nodeStatus.network === "sepolia" ? "8545" : "8545"}`,
+    address: "0x7E14104e2433fDe49C98008911298F069C9dE41a",
+    endpoint: "https://mev.elliot37.com",
     totalRelays: nodeStatus.totalRelayed,
-    totalMevSaved: nodeStatus.totalMevSaved,
+    totalMevSaved: (Number(nodeStatus.totalMevSaved) / 1e18).toFixed(6),
     lastActiveAt: Date.now() / 1000,
     active: true,
   }] : [];

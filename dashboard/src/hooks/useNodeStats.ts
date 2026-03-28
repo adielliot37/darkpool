@@ -41,12 +41,28 @@ export function useRelayEvents(nodeUrl: string) {
   const [events, setEvents] = useState<RelayEvent[]>([]);
 
   useEffect(() => {
+    async function loadHistory() {
+      try {
+        const res = await globalThis.fetch(`${nodeUrl}/events`);
+        const history = await res.json();
+        if (Array.isArray(history) && history.length > 0) {
+          setEvents(history.slice(-50));
+        }
+      } catch {}
+    }
+    loadHistory();
+
     const es = new EventSource(`${nodeUrl}/events/stream`);
     es.onmessage = (e) => {
       const event = JSON.parse(e.data) as RelayEvent;
       setEvents((prev) => [...prev.slice(-49), event]);
     };
-    return () => es.close();
+    es.onerror = () => {
+      setTimeout(loadHistory, 5000);
+    };
+
+    const interval = setInterval(loadHistory, 10000);
+    return () => { es.close(); clearInterval(interval); };
   }, [nodeUrl]);
 
   return events;
