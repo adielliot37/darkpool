@@ -25,6 +25,12 @@ let totalRelayed = 0;
 let totalMevSaved = 0n;
 const recentEvents: RelayEvent[] = [];
 
+function safeStringify(obj: any): string {
+  return JSON.stringify(obj, (_key, value) =>
+    typeof value === "bigint" ? value.toString() : value
+  );
+}
+
 function pushEvent(event: RelayEvent) {
   recentEvents.push(event);
   if (recentEvents.length > 100) recentEvents.shift();
@@ -134,7 +140,8 @@ export function createRpcServer() {
   });
 
   app.get("/events", (_req, res) => {
-    res.json(recentEvents);
+    res.setHeader("Content-Type", "application/json");
+    res.end(safeStringify(recentEvents));
   });
 
   app.get("/events/stream", (req, res) => {
@@ -144,7 +151,7 @@ export function createRpcServer() {
     res.flushHeaders();
 
     const handler = (event: RelayEvent) => {
-      res.write(`data: ${JSON.stringify(event)}\n\n`);
+      res.write(`data: ${safeStringify(event)}\n\n`);
     };
     relayEvents.on("event", handler);
     req.on("close", () => relayEvents.off("event", handler));
