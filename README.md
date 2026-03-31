@@ -139,6 +139,31 @@ npm install
 npm run dev
 ```
 
+## Why hardware?
+
+If your relay runs on AWS, Amazon can see your transactions. If it runs on Flashbots, Flashbots can see them. If it runs on any cloud provider, that provider is a single point of failure and a single point of surveillance.
+
+A Raspberry Pi sitting in your house has none of these problems. You own the hardware. You control the network. Nobody is in between.
+
+### Node specs
+
+| Component | Detail |
+|-----------|--------|
+| Hardware | Raspberry Pi 4 Model B |
+| RAM | 4GB LPDDR4 |
+| Storage | 32GB SD card (ext4 with journaling for power-cut safety) |
+| Network | WiFi 2.4GHz + Cloudflare Tunnel for public access |
+| OS | Raspberry Pi OS (Debian Trixie, aarch64) |
+| Node.js | v20.20.0 |
+| Services | darkpool.service + cloudflared.service (both auto-start on boot) |
+| Key storage | Persistent on disk, survives reboots |
+| Power draw | ~5W idle, ~7W under load |
+| Cost | ~$35 for the board |
+
+The Pi handles the full relay pipeline (encrypt, batch, submit, log receipt) in under 10 seconds per transaction. For a relay node that processes one-at-a-time user transactions, this is more than enough. You don't need a server rack to protect your swaps.
+
+Any machine that can run Node.js can be a Darkpool node. The Pi is the reference implementation because it proves the point: MEV protection doesn't need expensive infrastructure.
+
 ## Tech stack
 
 - Node.js / TypeScript / Express
