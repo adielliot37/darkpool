@@ -39,7 +39,7 @@ function pushEvent(event: RelayEvent) {
 
 export function createRpcServer() {
   const app = express();
-  app.use(cors());
+  app.use(cors({ origin: "*", methods: ["GET", "POST", "OPTIONS"], allowedHeaders: ["Content-Type"] }));
   app.use(express.json());
 
   const provider = new ethers.JsonRpcProvider(config.rpcUrl);
@@ -148,6 +148,7 @@ export function createRpcServer() {
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.flushHeaders();
 
     const handler = (event: RelayEvent) => {

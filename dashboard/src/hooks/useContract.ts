@@ -63,14 +63,14 @@ export function useNetworkStats() {
           });
         }
         setNodes(nodeInfos);
-      } catch (err) {
-        console.error("Contract read failed:", err);
+      } catch {
+        // Free RPC rate limit, silently retry later
       }
       setLoading(false);
     }
 
     fetch();
-    const interval = setInterval(fetch, 15000);
+    const interval = setInterval(fetch, 30000);
     return () => clearInterval(interval);
   }, []);
 

@@ -9,7 +9,7 @@ import { useNetworkStats } from "./hooks/useContract.js";
 import { useNodeStatus, useRelayEvents, useAttackerStatus } from "./hooks/useNodeStats.js";
 
 const NODE_URL = "https://mev.elliot37.com";
-const ATTACKER_URL = "http://localhost:9000";
+const ATTACKER_URL = "";
 
 const sectionStyle: React.CSSProperties = {
   marginBottom: 32,

@@ -72,6 +72,7 @@ export function useAttackerStatus(attackerUrl: string) {
   const [status, setStatus] = useState<any>(null);
 
   useEffect(() => {
+    if (!attackerUrl) return;
     async function fetch() {
       try {
         const res = await globalThis.fetch(`${attackerUrl}/status`);
