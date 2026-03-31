@@ -4,6 +4,7 @@ import NodeCard from "./components/NodeCard.js";
 import LiveFeed from "./components/LiveFeed.js";
 import MevSavings from "./components/MevSavings.js";
 import SideBySideDemo from "./components/SideBySideDemo.js";
+import HowToUse from "./components/HowToUse.js";
 import { useNetworkStats } from "./hooks/useContract.js";
 import { useNodeStatus, useRelayEvents, useAttackerStatus } from "./hooks/useNodeStats.js";
 
@@ -97,6 +98,11 @@ export default function App() {
       <div style={sectionStyle}>
         <div style={headingStyle}>MEV Protection vs Extraction</div>
         <MevSavings totalSaved={totalSaved} attackerProfit={attackerProfit} />
+      </div>
+
+      <div style={sectionStyle}>
+        <div style={headingStyle}>How to Use Darkpool</div>
+        <HowToUse />
       </div>
 
       <div style={sectionStyle}>
