@@ -136,6 +136,12 @@ export function createRpcServer() {
       pendingBatch: batcher.getPendingCount(),
       uptime: process.uptime(),
       agent: getAgentState(),
+      erc8004: {
+        agentId: 37507,
+        identityRegistry: "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+        reputationRegistry: "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+        operator: "0x7E14104e2433fDe49C98008911298F069C9dE41a",
+      },
     });
   });
 

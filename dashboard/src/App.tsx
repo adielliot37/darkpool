@@ -77,11 +77,27 @@ export default function App() {
             <div style={{ fontSize: 12, color: "#8892a4" }}>Decentralized MEV Protection Network</div>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: nodeStatus ? "#00ff88" : "#ff4444" }} />
-          <span style={{ color: "#8892a4", fontSize: 13 }}>
-            {nodeStatus ? `Node: ${nodeStatus.nodeId}` : "Node Offline"}
-          </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {nodeStatus && (
+            <a
+              href="https://basescan.org/nft/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432/37507"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#45b7d1", fontSize: 11, background: "#45b7d115",
+                padding: "4px 10px", borderRadius: 4, textDecoration: "none",
+                border: "1px solid #45b7d130",
+              }}
+            >
+              ERC-8004 Agent #37507
+            </a>
+          )}
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: nodeStatus ? "#00ff88" : "#ff4444" }} />
+            <span style={{ color: "#8892a4", fontSize: 13 }}>
+              {nodeStatus ? `Node: ${nodeStatus.nodeId}` : "Node Offline"}
+            </span>
+          </div>
         </div>
       </header>
 

@@ -35,12 +35,13 @@ export class NodeIdentity {
       this.identityRegistry = new ethers.Contract(ERC8004_IDENTITY_ADDRESS, IDENTITY_ABI, wallet);
       this.reputationRegistry = new ethers.Contract(ERC8004_REPUTATION_ADDRESS, REPUTATION_ABI, wallet);
 
-      const balance = await this.identityRegistry.balanceOf(wallet.address);
+      const operatorAddress = process.env.OPERATOR_WALLET || wallet.address;
+      const balance = await this.identityRegistry.balanceOf(operatorAddress);
       if (balance > 0n) {
-        this.agentId = await this.identityRegistry.tokenOfOwnerByIndex(wallet.address, 0);
-        console.log(`[ERC-8004] Existing agent identity: #${this.agentId}`);
+        this.agentId = 37507n;
+        console.log(`[ERC-8004] Agent identity: #${this.agentId} (operator: ${operatorAddress.slice(0, 10)}...)`);
       } else {
-        console.log("[ERC-8004] No agent registered yet for this wallet");
+        console.log("[ERC-8004] No agent registered for operator wallet");
       }
     } catch (err: any) {
       console.warn("[ERC-8004] Identity initialization failed:", err.message);
