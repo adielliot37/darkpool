@@ -158,7 +158,6 @@ A Raspberry Pi sitting in your house has none of these problems. You own the har
 | Services | darkpool.service + cloudflared.service (both auto-start on boot) |
 | Key storage | Persistent on disk, survives reboots |
 | Power draw | ~5W idle, ~7W under load |
-| Cost | ~$35 for the board |
 
 The Pi handles the full relay pipeline (encrypt, batch, submit, log receipt) in under 10 seconds per transaction. For a relay node that processes one-at-a-time user transactions, this is more than enough. You don't need a server rack to protect your swaps.
 

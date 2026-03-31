@@ -49,7 +49,6 @@ const piSpecs = [
   { label: "OS", value: "Raspberry Pi OS (aarch64)" },
   { label: "Node.js", value: "v20.20.0" },
   { label: "Network", value: "WiFi + Cloudflare Tunnel" },
-  { label: "Power", value: "~5W idle / ~7W load" },
   { label: "Key Storage", value: "Persistent on disk" },
   { label: "Encryption", value: "Lit Protocol V3 (TEE)" },
   { label: "Receipts", value: "Storacha (IPFS/Filecoin)" },
